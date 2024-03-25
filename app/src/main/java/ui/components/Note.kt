@@ -1,6 +1,7 @@
 package ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.*
@@ -20,34 +21,43 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.topic2.android.notes.R
+import com.topic2.android.notes.domain.model.NoteModel
 import com.topic2.android.notes.theme.rwGreen
+import com.topic2.android.notes.util.fromHex
 
 
 @Composable
-fun Note() {
+fun Note(
+    note: NoteModel,
+    onNoteClick: (NoteModel) -> Unit = {},
+    onNoteCheckedChange: (NoteModel) -> Unit ={}
+) {
     val backgroundShape: Shape = RoundedCornerShape(4.dp)
-    Row(modifier = Modifier
+    Row(
+        modifier = Modifier
         .padding(8.dp)
         .shadow(1.dp, backgroundShape)
         .fillMaxWidth()
         .heightIn(min = 64.dp)
         .background(Color.White, backgroundShape)
+        .clickable(onClick = {onNoteClick(note)})
         ) {
         NoteColor(
             modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .padding(start = 16.dp, end = 16.dp),
-            color = rwGreen,
+            color = Color.fromHex(note.color.hex),
             size = 40.dp,
             border = 1.dp
         )
-        Column(modifier = Modifier
-            .weight(1f)
-            .align(Alignment.CenterVertically)
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .align(Alignment.CenterVertically)
 
         ) {
             Text(
-                stringResource(id = R.string.app_title),
+                text = note.title,
                 maxLines = 1,
                 color = Color.Black,
                 style = TextStyle(
@@ -55,9 +65,9 @@ fun Note() {
                     fontSize = 16.sp,
                     letterSpacing = 0.15.sp
                 )
-                )
+            )
             Text(
-                stringResource(id = R.string.app_content),
+                text = note.content,
                 maxLines = 1,
                 color = Color.Black.copy(alpha = 0.75f),
                 style = TextStyle(
@@ -65,19 +75,32 @@ fun Note() {
                     fontSize = 14.sp,
                     letterSpacing = 0.25.sp
                 )
-                )
+            )
         }
-        Checkbox(
-            checked = false, onCheckedChange = { },
-            modifier = Modifier
-                .padding(start = 8.dp)
-                .align(Alignment.CenterVertically)
-        )
+        if (note.isCheckedOff != null) {
+            Checkbox(
+                checked = note.isCheckedOff,
+                onCheckedChange = { isChecked ->
+                    val newNote = note.copy(isCheckedOff = isChecked)
+                    onNoteCheckedChange(newNote)
+                },
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .align(Alignment.CenterVertically)
+            )
+        }
     }
 }
 @Preview
 @Composable
-private fun NotePreview(){ Note()
+private fun NotePreview(){ Note(
+    note = NoteModel(
+        1,
+        "Note 1",
+        "Content 1",
+        null
+    )
+)
 
 }
 
