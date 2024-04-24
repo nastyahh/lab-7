@@ -37,8 +37,10 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     private var _selectedNotes = MutableLiveData<List<NoteModel>>(listOf())
     val selectedNotes: LiveData<List<NoteModel>> = _selectedNotes
 
+
+
     fun onCreateNewNoteClick() {
-        // TODO - Open SaveNoteScreen
+       _noteEntry.value = NoteModel()
         NotesRouter.navigateTo(Screen.SaveNote)
     }
 
@@ -64,6 +66,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
             }
         }
     }
+
 
     fun restoreNotes(notes: List<NoteModel>) {
         viewModelScope.launch(Dispatchers.Default) {
