@@ -1,5 +1,6 @@
 package ui.components
 
+import android.graphics.drawable.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.foundation.Image
@@ -13,6 +14,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.primarySurface
 import androidx. compose.material.primarySurface
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,37 +35,36 @@ fun TopAppBar (
     onIconClick: () -> Unit,
 ){
     Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height (56.dp)
+            .background (color = MaterialTheme.colors.primarySurface)
+    ) {
+        Image (
+            imageVector = icon,
+            contentDescription = "Top App Bar Icon",
+            colorFilter = ColorFilter
+                .tint(MaterialTheme.colors.onPrimary),
+            modifier = Modifier
+                .clickable(onClick = onIconClick)
+                .padding (16.dp)
+                .align(Alignment.CenterVertically)
+        )
+        Text(
+            text = title,
+            color = MaterialTheme.colors.onPrimary,
+            style = TextStyle(
+                fontWeight = FontWeight.Medium,
+                fontSize = 20.sp,
+                letterSpacing = 0.15.sp
+            ),
             modifier = Modifier
                 .fillMaxWidth()
-                .height (56.dp)
-                .background (color = MaterialTheme.colors.primarySurface)
-) {
-    Image (
-        imageVector = icon,
-        contentDescription = "Top App Bar Icon",
-        colorFilter = ColorFilter
-            .tint(MaterialTheme.colors.onPrimary),
-        modifier = Modifier
-            .clickable(onClick = onIconClick)
-            .padding (16.dp)
-            .align(Alignment.CenterVertically)
-    )
-    Text(
-        text = title,
-        color = MaterialTheme.colors.onPrimary,
-        style = TextStyle(
-            fontWeight = FontWeight.Medium,
-            fontSize = 20.sp,
-            letterSpacing = 0.15.sp
-        ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterVertically)
-                        .padding(start = 16.dp, end = 16.dp)
-    )
+                .align(Alignment.CenterVertically)
+                .padding(start = 16.dp, end = 16.dp)
+        )
     }
 }
-
 @Preview
 @Composable
 private fun TopAppBarPreview() {
