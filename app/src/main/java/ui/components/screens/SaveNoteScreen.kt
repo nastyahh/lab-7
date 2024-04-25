@@ -2,6 +2,7 @@ package ui.components.screens
 
 import android.annotation.SuppressLint
 import android.provider.ContactsContract.CommonDataKinds.Note
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -71,6 +72,16 @@ val noteEntry: NoteModel by viewModel.noteEntry.observeAsState(NoteModel())
     val moveNoteToTrashDialogShownState: MutableState<Boolean> = rememberSaveable{
         mutableStateOf(false)
     }
+
+    BackHandler (
+        onBack = {
+            if(bottomDrawerState.isOpen){
+                coroutineScope.launch { bottomDrawerState.close() }
+            }else {
+                NotesRouter.navigateTo(Screen.Notes)
+            }
+        }
+    )
 
     Scaffold(topBar={
         val isEditingMode: Boolean = noteEntry.id != NEW_NOTE_ID
